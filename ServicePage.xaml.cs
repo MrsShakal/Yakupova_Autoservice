@@ -44,6 +44,20 @@ namespace Yakupova_Autoservice
         {
             UpdateServices();
         }
+        private void AddButton_Click(object sender, RoutedEventArgs e)
+        {
+            Manager.MainFrame.Navigate(new AddEditPage(null));
+        }
+        private void EditButton_Click(object sender, RoutedEventArgs e)
+        {
+            Manager.MainFrame.Navigate(new AddEditPage((sender as Button).DataContext as Service));
+        }
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Manager.MainFrame.Navigate(new AddEditPage(null));
+        }
+
+
         private void UpdateServices()
         {
             var currentServices = Якупова_автосервисEntities.GetContext().Service.ToList();
@@ -74,7 +88,7 @@ namespace Yakupova_Autoservice
                 currentServices = currentServices.Where(p => (p.Discount >= 0.7 && p.Discount < 1)).ToList();
             }
             currentServices = currentServices.Where(p => p.Title.ToLower().Contains(TBoxSearch.Text.ToLower())).ToList();
-            if(RButtonDown.IsChecked.Value)
+            if (RButtonDown.IsChecked.Value)
             {
                 currentServices = currentServices.OrderByDescending(p => p.Cost).ToList();
             }
@@ -84,10 +98,13 @@ namespace Yakupova_Autoservice
             }
             ServiceListView.ItemsSource = currentServices;
         }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Page_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            Manager.MainFrame.Navigate(new AddEditPage());
+            if (Visibility == Visibility.Visible)
+            {
+                Якупова_автосервисEntities.GetContext().ChangeTracker.Entries().ToList().ForEach(p => p.Reload());
+                ServiceListView.ItemsSource =  Якупова_автосервисEntities.GetContext().Service.ToList();
+            }
         }
     }
 }
