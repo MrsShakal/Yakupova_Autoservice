@@ -237,7 +237,7 @@ namespace Yakupova_Autoservice
             ChangePage(2, null);
         }
 
-        private void LeftDirButton_Click(object sender, RoutedEventArgs e)
+        private void LeftDirButton_Click(object sender, RoutedEventArgs e) // абобус
         {
             ChangePage(1, null);
         }
